@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import g # database on request
-
+from flask import jsonify # geerating json responses
 from models import DATABASE
 from models import initialize
 from models import Course
@@ -24,8 +24,11 @@ def after_request(request):
 @app.route('/api/v1/courses', methods=['GET'])
 def get_courses():
     courses = Course.select() # select * from courses
-    # print(courses)
-    return "Already got the courses"
+    courses = [ course.to_json() for course in courses]
+    return jsonify(generate_response(data = courses))
+
+def generate_response(status = 200, data = None, error = None):
+    return {'status': status, 'data': data, 'error': error}
 
 if __name__ == "__main__":
     # running the model function

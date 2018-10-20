@@ -14,6 +14,12 @@ class Course(Model):
     description = TextField()
     created_at = DateTimeField(default = datetime.datetime.now())
 
+    # instance method
+    def to_json(self):
+        return {'id': self.id, 'title': self.title, 'description': self.description}
+
+
+# regular methods
 # dummy data method - GET method instead of POST
 def create_course():
     title = 'Flask Course'
