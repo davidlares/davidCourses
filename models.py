@@ -18,6 +18,14 @@ class Course(Model):
     def to_json(self):
         return {'id': self.id, 'title': self.title, 'description': self.description}
 
+    # validating resources
+    @classmethod
+    def new(cls, title, description): # cls param is required
+        try:
+            return cls.create(title = title, description = description)
+        except IntegrityError as e:
+            print("IntegrityError bro")
+            return None
 
 # regular methods
 # dummy data method - GET method instead of POST
