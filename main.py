@@ -21,11 +21,18 @@ def after_request(request):
     g.db.close()
     return request
 
+# all courses
 @app.route('/api/v1/courses', methods=['GET'])
 def get_courses():
     courses = Course.select() # select * from courses
-    courses = [ course.to_json() for course in courses]
+    courses = [course.to_json() for course in courses]
     return jsonify(generate_response(data = courses))
+
+# specific course
+@app.route('/api/v1/course/<int:course_id>', methods=['GET'])
+def get_course(course_id):
+    course = Course.get(Course.id == course_id)
+    return jsonify(generate_response(data = course.to_json())) # had to be serializable
 
 def generate_response(status = 200, data = None, error = None):
     return {'status': status, 'data': data, 'error': error}
