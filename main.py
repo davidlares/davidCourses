@@ -23,6 +23,7 @@ def after_request(request):
     g.db.close()
     return request
 
+# error handling
 @app.errorhandler(404)
 def not_found(error):
     return jsonify(generate_response(404, error = 'Course not found'))
@@ -49,12 +50,6 @@ def get_course(course_id):
     course = try_course(course_id)
     return jsonify(generate_response(data = course.to_json())) # had to be serializable
 
-def try_course(course_id):
-    try:
-        return Course.get(Course.id == course_id)
-    except Course.DoesNotExist as e:
-        abort(404)
-
 # post courses
 @app.route('/api/v1/courses', methods=['POST'])
 def post_course():
@@ -68,7 +63,7 @@ def post_course():
         abort(422)
     return jsonify(generate_response(data = course.to_json()))
 
-# specific course
+# updating course
 @app.route('/api/v1/course/<int:course_id>', methods=['PUT'])
 def put_course(course_id):
     course = try_course(course_id)
@@ -82,6 +77,23 @@ def put_course(course_id):
         return jsonify(generate_response(data = course.to_json()))
     else:
         abort(422)
+
+# deleting course
+@app.route('/api/v1/course/<int:course_id>', methods=['DELETE'])
+def delete_course(course_id):
+    course = try_course(course_id)
+    if course.delete_instance():
+        return jsonify( generate_response(data = {} ))
+    else:
+        abort(422)
+
+# helpers methods
+
+def try_course(course_id):
+    try:
+        return Course.get(Course.id == course_id)
+    except Course.DoesNotExist as e:
+        abort(404)
 
 def generate_response(status = 200, data = None, error = None):
     return {'status': status, 'data': data, 'error': error}

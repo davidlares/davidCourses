@@ -28,8 +28,8 @@ class Course(Model):
             return None
 
 # regular methods
-# dummy data method - GET method instead of POST
 def create_course():
+    # dummy data method - GET method instead of POST
     title = 'Flask Course'
     description = 'Free Flask Course'
     if not Course.select().where(Course.title == title):
