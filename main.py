@@ -68,6 +68,21 @@ def post_course():
         abort(422)
     return jsonify(generate_response(data = course.to_json()))
 
+# specific course
+@app.route('/api/v1/course/<int:course_id>', methods=['PUT'])
+def put_course(course_id):
+    course = try_course(course_id)
+    if not request.json:
+        abort(400)
+
+    course.title = request.json.get('title', course.title)
+    course.description = request.json.get('description', course.description)
+
+    if course.save(): # we should validate
+        return jsonify(generate_response(data = course.to_json()))
+    else:
+        abort(422)
+
 def generate_response(status = 200, data = None, error = None):
     return {'status': status, 'data': data, 'error': error}
 
