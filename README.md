@@ -8,7 +8,7 @@ API REST creada con Flask (Python Framework) y MySQL con Peewee ORM, consiste bÃ
 - Pypi - Package Package Index instalado
 - virtualEnv para el soporte de multiples versiones de las dependencias (ver requirements.txt)
 
-## Instalaciï¿½n
+## Instalacion
 
 Antes de correr el script en el CLI se recomienda tener un entorno virtualizado corriendo
 
